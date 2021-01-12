@@ -107,5 +107,33 @@ namespace Notebook
         {
 
         }
+        
+        private async void mởCtrlOToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                using (OpenFileDialog ofd = new OpenFileDialog() { Filter = "TextFiles |*.txt", ValidateNames = true, Multiselect = false })
+                {
+                    if (ofd.ShowDialog() == DialogResult.OK)
+                    {
+                        using (StreamReader sr = new StreamReader(ofd.FileName))
+                        {
+                            string path;
+                            path = ofd.FileName;
+                            ReadNote read = new ReadNote();
+                            this.Hide();
+                            Task<string> text = sr.ReadToEndAsync();
+                            read.txbReadNote.Text= text.Result;
+                            read.ShowDialog();
+                        }
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
 }
